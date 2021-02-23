@@ -1,0 +1,47 @@
+div style='max-width: 800px;margin: auto'
+  div
+    div うさぎ専門
+    div 長期滞在型ペットホテル
+    h1 ラビットハウス
+  div
+    - @rooms.each do |room|
+      div
+        div
+          h2 部屋名
+          h3 = room.name
+        div
+          h3 予約全体
+          - room.reserved_months.each do |months|
+            div
+              span = display_year_month(months.first)
+              span 〜
+              span = display_year_month(months.last)
+        div
+          h3 予約
+          div
+            - form = ReserveForm.new(room_id: room.id, start_month: Date.current, end_month: Date.current)
+            = form_with model: form, url: rooms_path, method: :post do |f|
+              = f.hidden_field :room_id
+              = f.collection_select :rabbit_id, @rabbits, :id, :name
+              = f.month_field :start_month
+              = f.month_field :end_month
+              = f.submit
+        div
+          h3 一覧
+          table
+            thead
+            tr
+              th id
+              th 予約期間
+              th うさぎ名
+              th
+            tbody
+            - room.reservations.order(start_month: :asc).each do |reservation|
+              tr
+                td = reservation.id
+                td = "#{display_year_month(reservation.start_month)} - #{display_year_month(reservation.end_month)}"
+                td = " #{reservation.rabbit.name}"
+                td
+                  = form_with url: room_path(id: room.id, reservation_id: reservation.id), method: :delete do |f|
+                    = f.submit '削除'
+        hr

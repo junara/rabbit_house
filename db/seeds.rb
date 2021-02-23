@@ -1,8 +1,27 @@
 # frozen_string_literal: true
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+
+Reservation.delete_all
+Room.delete_all
+Rabbit.delete_all
+
+[
+  { name: 'うさぎのおへや1' },
+  { name: 'うさぎのおへや2' },
+  { name: 'うさぎのおへや3' }
+].each do |attributes|
+  Room.create(attributes)
+end
+
+[
+  { name: 'ネザーランドドワーフ' },
+  { name: 'ホーランドロップ' },
+  { name: 'ミニレッキス' }
+].each do |attributes|
+  Rabbit.create(attributes)
+end
+
+Room.all.each do |room|
+  Rabbit.all.each do |rabbit|
+    ReservationService.create(room, rabbit, Date.new(2021, 1, 1), Date.new(2021, 6, 1))
+  end
+end
