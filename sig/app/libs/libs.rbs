@@ -1,0 +1,7 @@
+class CustomTime
+  def add_month: (Time time, ?Integer integer) -> (nil | Integer)
+
+  def sum_month: (Array[Time] times) -> Integer
+
+  def self.now_month: () -> Integer
+end
